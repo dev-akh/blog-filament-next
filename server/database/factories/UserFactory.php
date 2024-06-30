@@ -41,4 +41,20 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Define a specific state for the first user.
+     *
+     * @return Factory
+     */
+    public function firstUser()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => 'Admin',
+                'email' => 'admin@localhost.com',
+                'password' => bcrypt('password'), // Set your desired password
+            ];
+        });
+    }
 }
