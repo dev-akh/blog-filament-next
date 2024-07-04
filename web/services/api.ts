@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { API_BASE_URL } from '@/config';
 
 interface ApiConfig {
@@ -13,7 +14,11 @@ const api = axios.create({
     headers: {
         common: {
             'Content-Type': 'application/json',
+            'Accept'      : 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         },
+        withCredentials: true,
+        withXSRFToken : true
     },
 });
 
@@ -22,8 +27,16 @@ const createRequest = async (config: ApiConfig) => {
     return response.data;
 };
 
-export const get = (endpoint: string, data : any = {}) => {
-    return createRequest({ method: 'get', url: endpoint, data });
+export const get = (endpoint: string, data : any = {}, headers = {}) => {
+    return createRequest({ 
+      method: 'get',
+      url: endpoint,
+      data,
+      headers: {
+        ...api.defaults.headers.common,
+        ...headers,
+      },
+    });
 };
 
 export const post = (endpoint: string, data: any, headers = {}) => {

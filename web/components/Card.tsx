@@ -12,15 +12,13 @@ function Card({ item }: { item: Post }) {
   return (
 
     <div className="max-w-full m-2 sm:m-0 bg-gray-100 shadow-sm transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-105 hover:bg-indigo-200 duration-300 rounded-md">
-      <Link className="text-lg " href={`/${item.slug}`}>
+      <Link className="text-lg " href={`/blogs/${item.slug}`}>
       <Image className="rounded-lg p-3 " width={1000} height={250} src={imageSrc} alt="Blog Image" />
       <div className="p-3">
-        <div className="flex mb-3 text-sm text-gray-500 dark:text-gray-400">
-          <FaClock/> 
-          <p className="px-2">
-            {postDate}
-          </p>
-        </div>
+        <div className="flex items-center text-gray-500 text-sm mb-4 dark:text-gray-400">
+            <FaClock />
+            <span className="ml-2">{postDate}</span>
+          </div>
           {item.title}
       </div>
       </Link>

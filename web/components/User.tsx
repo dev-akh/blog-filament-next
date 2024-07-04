@@ -1,46 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { FaUser } from "react-icons/fa";
-import Link from 'next/link';
+import { FaUser } from 'react-icons/fa';
+import LoginModal from '@/components/LoginModal';
+import RegisterModal from '@/components/RegisterModal';
 
-function User() {
-  const [loggedIn, setLoggedIn ] = useState<Boolean>(false);
+const User: React.FC = () => {
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState<boolean>(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogin = (token: string) => {
+    localStorage.setItem('access_token', token);
+    setLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    setLoggedIn(false);
+  };
+
+  const handleLoginClick = () => {
+    setLoginModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setLoginModalOpen(false);
+  };
+
   return (
-  <Popover.Root>
-    <Popover.Trigger asChild>
-
-      <button className="cursor-pointer outline-none hover:text-gray-500" aria-label="User">
-        <FaUser />
-      </button>
-    </Popover.Trigger>
-
-    <Popover.Portal>
-      <Popover.Content className="rounded p-2 w-auto bg-gray-300  data-[state=open]:data-[side=top]:animate-slideDownAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade z-[600]"
-        sideOffset={5}>
-        <div className=" bg-gray-300">
-          <div className="inset-y-0 left-0 flex items-center pl-3">
-            <ul>
-                {loggedIn ? (
-                  <>
+    <>
+      <Popover.Root>
+        <Popover.Trigger asChild>
+          <button className="cursor-pointer outline-none hover:text-gray-500" aria-label="User">
+            <FaUser />
+          </button>
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Content
+            className="rounded p-2 w-auto bg-gray-300 data-[state=open]:data-[side=top]:animate-slideDownAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade z-[600]"
+            sideOffset={5}
+          >
+            <div className="bg-gray-300">
+              <div className="inset-y-0 left-0 flex items-center pl-3">
+                <ul>
+                  {loggedIn ? (
+                    <>
+                      <li className="py-2">
+                        <button className="px-4 cursor-pointer hover:-translate-x-1 hover:scale-102 duration-300 hover:bg-indigo-200" onClick={() => setIsRegisterOpen(true)}>
+                          Profile
+                        </button>
+                      </li>
+                      <li className="py-2">
+                        <button className="px-4 cursor-pointer hover:-translate-x-1 hover:scale-102 duration-300 hover:bg-indigo-200" onClick={handleLogout}>
+                          Logout
+                        </button>
+                      </li>
+                    </>
+                  ) : (
                     <li className="py-2">
-                      <button className="px-4 cursor-pointer hover:-translate-x-1 hover:scale-102 duration-300 hover:bg-indigo-200">Profile</button>
+                      <button
+                        className="px-4 cursor-pointer hover:-translate-x-1 hover:scale-102 duration-300 hover:bg-indigo-200"
+                        onClick={handleLoginClick}
+                      >
+                        Login
+                      </button>
                     </li>
-                    <li className="py-2">
-                      <button className="px-4 cursor-pointer hover:-translate-x-1 hover:scale-102 duration-300 hover:bg-indigo-200">Logout</button>
-                    </li>
-                  </>
-                ) : (
-                  <li className="py-2">
-                    <button className="px-4 cursor-pointer hover:-translate-x-1 hover:scale-102 duration-300 hover:bg-indigo-200">Login</button>
-                  </li>
-                )}
-            </ul>
-          </div>
-        </div>
-      </Popover.Content>
-    </Popover.Portal>
-  </Popover.Root>
-  )
-}
+                  )}
+                </ul>
+              </div>
+            </div>
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+
+      <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseModal} onLogin={handleLogin} />
+      {isRegisterOpen && <RegisterModal onClose={() => setIsRegisterOpen(false)} stage="profile"/>}
+    </>
+  );
+};
 
 export default User;
