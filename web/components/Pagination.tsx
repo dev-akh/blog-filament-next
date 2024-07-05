@@ -1,23 +1,19 @@
 import { PaginationProps } from "@/types/paginate";
 import { useState, useEffect, useRef } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Pagination = ({ page, pageSize, totalItems, onPageChange }: PaginationProps) => {
   const totalPages = Math.ceil(totalItems / pageSize);
-  const [isFetching, setIsFetching] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handlePageChange = async (newPage: number) => {
     if ((page * pageSize) >= totalItems) return;
     if (newPage >= 1 && newPage <= totalPages) {
-      setIsFetching(true);
       try {
         await onPageChange(newPage);
       } catch (error) {
         console.error('Error fetching new page:', error);
       } finally {
         setTimeout(() => {
-          setIsFetching(false);
           if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: 'smooth' });
           }
@@ -35,8 +31,7 @@ const Pagination = ({ page, pageSize, totalItems, onPageChange }: PaginationProp
           Showing {loadedItem} of {totalItems}
         </span>
       </div>
-      {isFetching && <LoadingSpinner />}
-      {!isFetching && (page * pageSize) < totalItems && (
+      {(page * pageSize) < totalItems && (
         <div className='flex justify-center items-center mt-4'>
           <button 
             className="bg-blue-500 text-white px-4 py-2 rounded"

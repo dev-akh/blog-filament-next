@@ -1,22 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as api from '@/services/api';
 import { register as registerEndpoint } from "@/services/endpoints";
+import { User } from '@/types/user';
 
 interface RegisterProps {
   onClose: () => void;
-  stage: string
+  stage: string,
+  user?: User
 }
 
-const Register: React.FC<RegisterProps> = ({ onClose , stage }) => {
+const Register: React.FC<RegisterProps> = ({ onClose , stage, user }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  useEffect(()=>{
+    if(stage=="profile" && user){
+      setName(user.name);
+      setEmail(user.email);
+    }
+  })
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      // Handle password mismatch error
       return;
     }
     const response = await api.post(registerEndpoint, {
@@ -56,33 +64,38 @@ const Register: React.FC<RegisterProps> = ({ onClose , stage }) => {
               className="w-full p-2 border border-gray-300 rounded mt-1 dark:bg-white"
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1 dark:bg-white"
-            />
-          </div>
           {stage == 'register' && (
+            <>
             <div className="mb-4">
-                <label className="block text-gray-700">Confirm Password</label>
-                <input
+              <label className="block text-gray-700">Password</label>
+              <input
                 type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1 dark:bg-white"
-                />
+              />
             </div>
+            
+              <div className="mb-4">
+                  <label className="block text-gray-700">Confirm Password</label>
+                  <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded mt-1 dark:bg-white"
+                  />
+              </div>
+            </>
           )}
           <div className="flex justify-end">
             <button type="button" className="mr-2 px-4 py-2 bg-gray-200 rounded" onClick={onClose}>
               Cancel
             </button>
+            {stage == 'register' && (
             <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-            {stage == 'register' ? "Register":"Update"}
+              Register
             </button>
+            )}
           </div>
         </form>
       </div>

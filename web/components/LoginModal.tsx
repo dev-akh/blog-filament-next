@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
 import * as api from '@/services/api';
 import RegisterModal from '@/components/RegisterModal';
 import { csrfCookie as csrfCookieEndpoint, login as loginEndpoint } from "@/services/endpoints";
- 
+import { User } from '@/types/user';
+
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogin: (token: string) => void; // Callback to handle login
+  onLogin: (token: string, user: User) => void;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   if (!isOpen) return null;
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoggingIn(true);
     await api.get(csrfCookieEndpoint);
     const response = await api.post(loginEndpoint,{
         email,
         password 
     });
-    const data = await response.json();
-    const token = data.data?.token;
-    if (token?.access_token) {
-      onLogin(token.access_token);
+    const data = response.data;
+    const token = data?.token;
+    if (token?.access_token && data.user) {
+      onLogin(token.access_token, data.user);
       onClose();
     } else {
-      // Handle error
+      console.error(response);
     }
   };
 
@@ -62,8 +62,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
             <button type="button" className="mr-2 px-4 py-2 bg-gray-200 rounded" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-              Login
+            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded" disabled={isLoggingIn}>
+              {isLoggingIn ? (
+                <span>
+                  Logging in . . .
+                </span>
+              ) : (
+                <span> Login </span>
+              )}
             </button>
           </div>
         </form>

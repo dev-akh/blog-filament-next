@@ -6,6 +6,7 @@ import { posts as postendpoint } from "@/services/endpoints";
 import * as api from '@/services/api';
 import { Paginate } from "@/types/paginate";
 import HeroBanner from "@/components/HeroBanner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const defaultPaginate: Paginate = {
   current_page: 1,
@@ -19,9 +20,11 @@ const defaultPaginate: Paginate = {
 export default function Posts() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [paginate, setPaginate] = useState<Paginate>(defaultPaginate);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsFetching(true);
       try {
         const endpoint = `${postendpoint}?per_page=${paginate.per_page}&page=${paginate.current_page}`;
         const data = await api.get(endpoint);
@@ -34,6 +37,8 @@ export default function Posts() {
         setPaginate(data.meta);
       } catch (error) {
         console.error('Error fetching posts:', error);
+      } finally {
+        setIsFetching(false);
       }
     };
     fetchData();
@@ -54,12 +59,16 @@ export default function Posts() {
             <Card key={item.id} item={item} />
             ))}
         </main>
-        <Pagination 
+        {isFetching?(
+          <LoadingSpinner/>
+        ):(
+          <Pagination 
             page={paginate?.current_page}
             pageSize={paginate?.per_page}
             totalItems={paginate?.total}
             onPageChange={handlePageChange}
         />
+        )}
       </HeroBanner>
     </>
   );

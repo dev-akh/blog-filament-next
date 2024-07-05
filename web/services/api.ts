@@ -7,6 +7,7 @@ interface ApiConfig {
     url: string;
     data: any;
     headers?: Record<string, any>;
+    withCredentials?: boolean;
 }
 
 const api = axios.create({
@@ -14,12 +15,10 @@ const api = axios.create({
     headers: {
         common: {
             'Content-Type': 'application/json',
-            'Accept'      : 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+            'Accept'      : 'application/json'
         },
-        withCredentials: true,
-        withXSRFToken : true
     },
+    withCredentials: true 
 });
 
 const createRequest = async (config: ApiConfig) => {
@@ -40,6 +39,7 @@ export const get = (endpoint: string, data : any = {}, headers = {}) => {
 };
 
 export const post = (endpoint: string, data: any, headers = {}) => {
+  const csrfToken = Cookies.get('XSRF-TOKEN');
   return createRequest({
     method: 'post',
     url: endpoint,
@@ -47,6 +47,7 @@ export const post = (endpoint: string, data: any, headers = {}) => {
     headers: {
       ...api.defaults.headers.common,
       ...headers,
+      'X-CSRF-TOKEN': csrfToken
     },
   });
 };
