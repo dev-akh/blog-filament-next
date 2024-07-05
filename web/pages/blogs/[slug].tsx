@@ -2,35 +2,63 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaClock } from 'react-icons/fa';
 import { Post } from '@/types/post';
-import { Comment } from '@/types/comment';
+import { Comment as CommentType } from '@/types/comment';
 import { formatDate } from '@/services/dateFormat';
 import defaultBlogImage from '@/assets/images/blog-320x200.png';
-import { getPost, posts as postsEndpoint } from "@/services/endpoints";
+import { getPost, posts as postsEndpoint, comment as commentEndpoint } from "@/services/endpoints";
 import * as api from '@/services/api';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface BlogPostProps {
   post: Post;
-  isLoggedIn: boolean;
 }
 
-const BlogPost: React.FC<BlogPostProps> = ({ post, isLoggedIn }) => {
+const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [comment, setComment] = useState('');
+  const [comments, setComments] = useState<any>([]);
+  const [token, setToken] = useState<string>();
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+
+  useEffect(() => {
+    setComments(post.comments);
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setToken(token);
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return <div><LoadingSpinner/></div>;
   }
 
   const imageSrc: string = post.image ?? defaultBlogImage;
   const postDate: string = formatDate(post.created_at);
 
   const handleCommentSubmit = async () => {
-    // Implement your comment submission logic here
-    console.log('Submitting comment:', comment);
-    // Example: You can call an API endpoint to submit the comment
+    setIsSubmit(true);
+    try {
+      const singlePostComment = commentEndpoint.replace(':postId', String(post.id));
+      const response = await api.post(singlePostComment,{
+        comment
+      }, {
+        Authorization: `Bearer ${token}`
+      });
+      if (response.data) {
+        setComments((prev: CommentType[]) => [...prev, response.data]);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmit(false);
+      setComment('');
+    }
+    
   };
 
   return (
@@ -59,7 +87,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post, isLoggedIn }) => {
           <div className="mt-6 border-t border-gray-600">
             <h2 className="text-2xl font-semibold mb-4">Comments</h2>
             <ul className="list-none">
-              {post.comments.map(comment => (
+              {comments.map((comment: CommentType) => (
                 <li key={comment.id} className="border-b border-gray-200 py-4">
                   <div className="flex items-center mb-2">
                     <div className="text-gray-700 font-semibold">{comment.user?.name}</div>
@@ -80,12 +108,20 @@ const BlogPost: React.FC<BlogPostProps> = ({ post, isLoggedIn }) => {
                 placeholder="Enter your comment..."
                 className="w-full p-2 border border-gray-300 rounded mt-1 dark:bg-gray-100"
               />
-              <button
-                onClick={handleCommentSubmit}
-                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Submit Comment
-              </button>
+              { !isSubmit ? (
+                <button
+                  onClick={handleCommentSubmit}
+                  className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Submit Comment
+                </button>
+              ):(
+                <button
+                  className="mt-2 px-4 py-2 bg-blue-300 text-white rounded hover:bg-blue-100" disabled={false}
+                >
+                  Submitting . . .
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -112,12 +148,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
       notFound: true,
     };
   }
-  const isLoggedIn = true;
 
   return {
     props: {
       post: post.data,
-      isLoggedIn,
     },
     revalidate: 1,
   };
