@@ -4,7 +4,7 @@ services:
   api:
     tty: true
     build:
-      context: '.'
+      context: './server'
       dockerfile: Dockerfile
       args:
         - uid=1000
@@ -13,8 +13,8 @@ services:
     environment:
       - APACHE_RUN_USER=devuser
       - APACHE_RUN_GROUP=www-data
-    # volumes:
-    #   - .:/var/www/html/weone_blog:delegated
+    volumes:
+      - ./server:/var/www/html/weone_blog:delegated
     ports:
       - "8080:80"
     links:
@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     networks:
-      - backend
+      - weone
   db:
     image: mysql:8.0
     restart: always
@@ -38,7 +38,7 @@ services:
       - MYSQL_PASSWORD=password
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     networks:
-      - backend
+      - weone
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -53,8 +53,20 @@ services:
       - PMA_HOST=db
       - PMA_PORT=3306
     networks:
-      - backend
+      - weone
+
+  socket:
+    build:
+      context: './socket'
+      dockerfile: Dockerfile
+    container_name: weone_blog_socket
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./socket/.env
+    networks:
+      - weone
 
 networks:
-  backend:
-    name: backend-network
+  weone:
+    name: weone-network

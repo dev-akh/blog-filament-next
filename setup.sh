@@ -1,10 +1,17 @@
 #!/bin/bash
 
-# Read environment variables from .env file
-if [ -f "./server/.env" ]; then
+SERVER_ENV_FILE="./server/.env"
+SOCKET_ENV_FILE="./socket/.env"
+
+if [ -f "$SERVER_ENV_FILE" ]; then
     export $(grep -v '^#' ./server/.env | xargs)
 else
-    echo ".env file not found."
+    echo "Error: .env file not found in $SERVER_ENV_FILE."
+    exit 1
+fi
+
+if [ ! -f "$SOCKET_ENV_FILE" ]; then
+    echo "Error: .env file not found in $SOCKET_ENV_FILE."
     exit 1
 fi
 
@@ -31,15 +38,18 @@ fi
 # Check if Docker container exists
 if [ ! "$(docker ps -aq -f name=weone_blog)" ]; then
     echo "Building and starting Docker containers..."
-    docker-compose -f ./server/docker-compose.yml build --no-cache
-    docker-compose -f ./server/docker-compose.yml up -d
+    docker-compose -f ./docker-compose.yml build --no-cache
+    docker-compose -f ./docker-compose.yml up -d
+    docker-compose exec api php artisan migrate
+    docker-compose exec api php artisan db:seed
     echo "Backend containers started."
 else
     echo "Docker container weone_blog already exists."
     echo "Restarting containers..."
-    docker-compose -f ./server/docker-compose.yml restart weone_blog
-    docker-compose -f ./server/docker-compose.yml restart weone_blog_DB
-    docker-compose -f ./server/docker-compose.yml restart weone_blog_PMA
+    docker-compose -f ./docker-compose.yml restart weone_blog
+    docker-compose -f ./docker-compose.yml restart weone_blog_DB
+    docker-compose -f ./docker-compose.yml restart weone_blog_PMA
+    docker-compose -f ./docker-compose.yml restart weone_blog_socket
     echo "Containers restarted."
 fi
 
