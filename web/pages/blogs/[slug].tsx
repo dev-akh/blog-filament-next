@@ -20,18 +20,18 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState<any>([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [token, setToken] = useState<string>();
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
   useEffect(() => {
-    setComments(post.comments);
+    setComments(post.comments ?? []);
     const token = localStorage.getItem('access_token');
     if (token) {
       setToken(token);
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [post?.comments]);
 
   if (router.isFallback) {
     return <div><LoadingSpinner/></div>;
@@ -44,11 +44,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
     setIsSubmit(true);
     try {
       const singlePostComment = commentEndpoint.replace(':postId', String(post.id));
-      const response = await api.post(singlePostComment,{
-        comment
-      }, {
-        Authorization: `Bearer ${token}`
-      });
+      const response = await api.post(singlePostComment, { comment }, { Authorization: `Bearer ${token}` });
       if (response.data) {
         setComments((prev: CommentType[]) => [...prev, response.data]);
       }
@@ -58,7 +54,6 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
       setIsSubmit(false);
       setComment('');
     }
-    
   };
 
   return (
@@ -87,7 +82,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
           <div className="mt-6 border-t border-gray-600">
             <h2 className="text-2xl font-semibold mb-4">Comments</h2>
             <ul className="list-none">
-              {comments.map((comment: CommentType) => (
+              {comments.length > 0 && comments.map((comment: CommentType) => (
                 <li key={comment.id} className="border-b border-gray-200 py-4">
                   <div className="flex items-center mb-2">
                     <div className="text-gray-700 font-semibold">{comment.user?.name}</div>
@@ -108,18 +103,18 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
                 placeholder="Enter your comment..."
                 className="w-full p-2 border border-gray-300 rounded mt-1 dark:bg-gray-100"
               />
-              { !isSubmit ? (
+              {!isSubmit ? (
                 <button
                   onClick={handleCommentSubmit}
                   className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
                   Submit Comment
                 </button>
-              ):(
+              ) : (
                 <button
-                  className="mt-2 px-4 py-2 bg-blue-300 text-white rounded hover:bg-blue-100" disabled={false}
+                  className="mt-2 px-4 py-2 bg-blue-300 text-white rounded" disabled
                 >
-                  Submitting . . .
+                  Submitting...
                 </button>
               )}
             </div>
@@ -140,7 +135,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { slug }   = context.params as { slug: string };
+  const { slug } = context.params as { slug: string };
   const singlePost = getPost.replace(':slug', slug);
   const post = await api.get(singlePost);
   if (!post.data) {
