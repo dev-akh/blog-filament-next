@@ -26,7 +26,7 @@ class PostFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'image' => $this->faker->imageUrl(),
+            'image' => '',
             'published' => $this->faker->boolean(80),
             'content' => $content,
         ];

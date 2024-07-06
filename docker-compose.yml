@@ -1,0 +1,72 @@
+version: '3.6'
+
+services:
+  api:
+    tty: true
+    build:
+      context: './server'
+      dockerfile: Dockerfile
+      args:
+        - uid=1000
+        - app_name=weone_blog_server
+    container_name: weone_blog
+    environment:
+      - APACHE_RUN_USER=devuser
+      - APACHE_RUN_GROUP=www-data
+    volumes:
+      - ./server:/var/www/html/weone_blog:delegated
+    ports:
+      - "8080:80"
+    links:
+      - db
+    depends_on:
+      - db
+    networks:
+      - weone
+  db:
+    image: mysql:8.0
+    restart: always
+    container_name: weone_blog_DB
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=weone_blog
+      - MYSQL_USER=weone
+      - MYSQL_PASSWORD=password
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - weone
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: weone_blog_PMA
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    networks:
+      - weone
+
+  socket:
+    build:
+      context: './socket'
+      dockerfile: Dockerfile
+    container_name: weone_blog_socket
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./socket/.env
+    networks:
+      - weone
+
+networks:
+  weone:
+    name: weone-network

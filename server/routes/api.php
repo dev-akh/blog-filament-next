@@ -27,6 +27,6 @@ Route::get('/posts/{slug}', [PostController::class, 'show'])->name('post.show');
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/verify-user/{user}/{has}', [AuthController::class, 'verify'])->name('verify.user');
+    Route::post('/verify-user/{user}/{hash}', [AuthController::class, 'verify'])->name('verify.user');
     Route::post('/post/comment/{post}', [PostController::class, 'comment'])->name('post.comment');
 });
