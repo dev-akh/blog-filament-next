@@ -1,0 +1,19 @@
+{
+  "name": "weone_blog_socket",
+  "version": "1.0.0",
+  "description": "Socket server using node js",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "keywords": [
+    "socket"
+  ],
+  "author": "dev.aungkyawhtwe@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.4",
+    "socket.io": "^4.7.5"
+  }
+}

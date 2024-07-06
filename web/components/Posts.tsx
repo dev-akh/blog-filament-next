@@ -42,6 +42,7 @@ export default function Posts() {
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paginate.current_page]);
 
   const handlePageChange = async (newPage: number) => {

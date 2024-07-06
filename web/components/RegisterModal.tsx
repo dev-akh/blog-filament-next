@@ -20,7 +20,7 @@ const Register: React.FC<RegisterProps> = ({ onClose , stage, user }) => {
       setName(user.name);
       setEmail(user.email);
     }
-  })
+  },[stage, user])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
