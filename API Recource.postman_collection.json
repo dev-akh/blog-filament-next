@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "0b5ea423-9e70-4be4-b9e8-0cf62a2fdc38",
+		"name": "API Recource",
+		"description": "## Categories and Post\n\n### Comment\n\nAPI authorization header need to set Bearer\n\n`Bearer <>`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13225641"
+	},
+	"item": [
+		{
+			"name": "Categories",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Posts",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Post Detail",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiYTEyNTUxYTM1NDRkN2RiZTBhMGE0YzE1OGY1OTEwYjI5MWI3ZDFjMTA2ZTNhNmYwZmU2OTk1ZDZmZDM0OGY2ZmJkNmMzMjI0MjllNWVhMzciLCJpYXQiOjE3MTk4NTM1NzUuNDg5NDY4LCJuYmYiOjE3MTk4NTM1NzUuNDg5NDczLCJleHAiOjE3MjExNDk1NzUuNDUyODMxLCJzdWIiOiIyOCIsInNjb3BlcyI6W119.oU4VrK33mQs0PFNLUWK31Z8uiI2bl_p-mWNZHL7Di3wnv7C0tRUUs_vwAD3fDbodRzq_3P4kXcnawdJ4C1PLxjGWfNRn0_Nelt5KndX3pgLlMsqZr7KeKR8Xvy_WFPX82W5KCCj0UvsNDMfZJMCk4ClCn0YbUiayMqZjRssCt23-lS3Jb55Rx-4pypK-FwLHWoVEQphFIRyViybWErlflexi7MIyhuf14Erb--EaSBgRizEQUkR7yMP-HWSQy_fSyddMQVfkgkYTd9nwexmzpuNaXza0Y3Hzei4hi9CzSZKM_2PZyuXZAOvdTpUePtM0HtQB60cg1q2izjDItoUcP-JjWu6nMX6cD0HKs5yG17hAXJO7OITDPHMPQFYSySb-YQcxICUn0o2CQ9d_FUiimF49dRDhNObTwPSW6bFGmfthUmhfrkRvf7zp0NPeaFV1DnYhO3TFLsHAbaTM5q5cSekWyCc7HIeMs512-gG4yZuoJ5Odbm7y86ayC7QoLpCFPbnUA5vnZ2j-erEFOEd8gQQPDo3jOOBjyxdRIgeL1VhWBOM2CECRLDbLZwb7H8CruVZPGWVABUqT1CLeM4vbDWbbjziXSed5JyDi52j34BkAPGEQsgCEAwQfN6NcIhadjZC2jTzr51mLdmx9hLDbyopfBMymxM-rN60fQL9SuRY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\" : \"Test Comment\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/post/comment/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"post",
+						"comment",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
