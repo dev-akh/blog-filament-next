@@ -56,6 +56,15 @@ MAIL_FROM_NAME="${APP_NAME}"
 - Go to the project directory `/blog-filament-next`
 - Run the following command in terminal
 - `./setup.sh` for Backend and Socket server
+### Add Client Acces Keys
+```
+docker-compose exec api php artisan passport:client --password
+```
+Add the generated `id` and `secret` keys in .env file
+```
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID=
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=
+```
 
 ## Restart Project 
 - Go to the project directory `/blog-filament-next`
