@@ -13,7 +13,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->firstUser()->create();
-        User::factory(24)->create();
+        if (User::where('email', 'admin@localhost.com')->doesntExist()) {
+            User::factory()->firstUser()->OrCreate();
+        }
+        User::factory(25)->create();
     }
 }
