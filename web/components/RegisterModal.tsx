@@ -33,8 +33,10 @@ const Register: React.FC<RegisterProps> = ({ onClose , stage, user }) => {
       password,
       password_confirmation: confirmPassword
     });
-    const data = await response.json();
-    if (data.success) {
+    const data = response.data;
+    if (data.token.access_token) {
+      localStorage.setItem('access_token', data.token?.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       onClose();
     } else {
       // Handle registration error
