@@ -42,6 +42,7 @@ if [ ! "$(docker ps -aq -f name=weone_blog)" ]; then
     docker-compose -f ./docker-compose.yml up -d
     docker-compose exec api php artisan migrate
     docker-compose exec api php artisan db:seed
+    docker-compose exec socket npm run start
     echo "Backend containers started."
 else
     echo "Docker container weone_blog already exists."

@@ -28,7 +28,7 @@ class AuthController extends Controller
             event(new Registered($user));
             $user->sendEmailVerificationNotification();
 
-            $response = Http::post(config('app.url').'/oauth/token', [
+            $response = Http::post(config('app.self_url').'/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => config('passport.personal_access_client.id'),
                 'client_secret' => config('passport.personal_access_client.secret'),
@@ -37,7 +37,7 @@ class AuthController extends Controller
                 'scope' => '',
             ]);
             $token = $response->json();
-            if($response->getStatusCode() == 200) {
+            if($response->getStatusCode() == 200 && $token) {
                 return response()->json([
                     'success' => true,
                     'statusCode' => 201,
@@ -64,7 +64,7 @@ class AuthController extends Controller
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            $response = Http::asForm()->post(config('app.url').'/oauth/token', [
+            $response = Http::asForm()->post(config('app.self_url').'/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => config('passport.personal_access_client.id'),
                 'client_secret' => config('passport.personal_access_client.secret'),
@@ -115,7 +115,7 @@ class AuthController extends Controller
      */
     public function refreshToken(RefreshTokenRequest $request): JsonResponse
     {
-        $response = Http::asForm()->post(config('app.url').'/oauth/token', [
+        $response = Http::asForm()->post(config('app.self_url').'/oauth/token', [
             'grant_type' => 'refresh_token',
             'refresh_token' => $request->refresh_token,
             'client_id' => config('passport.personal_access_client.id'),
