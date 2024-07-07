@@ -51,6 +51,9 @@ const User: React.FC = () => {
     setLoginModalOpen(false);
   };
 
+  const handleCloseProfileModal = () => {
+    setIsRegisterOpen(false)
+  }
   return (
     <>
       <Popover.Root>
@@ -104,7 +107,7 @@ const User: React.FC = () => {
       </Popover.Root>
 
       <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseModal} onLogin={handleLogin} />
-      {isRegisterOpen && <RegisterModal onClose={() => setIsRegisterOpen(false)} stage="profile" user={user} />}
+      {isRegisterOpen && <RegisterModal onClose={handleCloseProfileModal} stage="profile" user={user}/>}
 
       {/* Confirm Logout Dialog */}
       <ConfirmDialog isOpen={showConfirmLogout} onConfirm={confirmLogout} onCancel={cancelLogout} />
