@@ -1,0 +1,235 @@
+{
+	"info": {
+		"_postman_id": "db882a19-ca5f-4e3e-a98d-a522363ca378",
+		"name": "Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13225641"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Admin10\",\r\n    \"email\":\"admin10@localhost.com\",\r\n    \"password\":\"password\",\r\n    \"password_confirmation\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"admin3@localhost.com\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Me",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiYTk0NDIyNTcyMTAzMjNkYjIzNmMzNmE0NWNmZGMwOGI4MWU2NDA1NDI2YTRiMjA4NzU4NjM4MDNlN2M3NmMxYmY4YzhlZTMzMjg2MzhlOTUiLCJpYXQiOjE3MTk3OTgyNzguMjU5OTgzLCJuYmYiOjE3MTk3OTgyNzguMjU5OTkyLCJleHAiOjE3MjEwOTQyNzguMjQ2MDU0LCJzdWIiOiIzNSIsInNjb3BlcyI6W119.Qe7mle4w6kBNTiVXX76x8xnwEiqyF-M9e6aCkar0FzcKZ5GBLCQktaWynKK1LfnwQhSvRg4P_K6gLXYEy3MWXETh4PKHhvc8z_-BLFYo-XdyL_GMJ279Y9tngaiAMa3_6swQcIVoLMLIu-oII34_noicwbwP25yNz_RRtRozDFbf9Xi1zcdcEA7di4yp0iWKTGmQxLb97-h3BaMw40nDrg68RPB9ckMH87oJgOeyhABoRaa9kFSkTBC952sEfupp3FBgJVodLn_aJc8usaQ5362gWPKKkmCBBgbm4CaGrqYP1HKn19yDRnb75_h_ypCM0ulbCDU31nffmzsy9y-XWcgrgojOCA_F84sWVeeZz7pan3toGKvUwp6oiXH7F3lhrsut33pIZ1ANAsmZueZ32bPDikz2rmhhCsZqkIRHJCgJwWIHNDIKENh398MkTSqbshF1Hujl4jwlqOXPiFsgod0ddQSFrJFkdHFVh9lOkgOk_oogHecydqUPgf9x0Mj64hPcIiJZG_45Lq_ghnsNcwEcM_PoatmwP7RBPkjZM5QASYNehgj5VQ68IV5zcvwmvgDhzxrWUhU5tCHoSrU4AfA8DGEodsGA1IDLU0hkGGhNuoQ_0w1ebJOuF_PwIJfGnXhCYIn_kShNp6jOFD3Po9unnbcBfa_phPWAPvlPR-g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refresh_token\":\"def50200e8e82b29275b6d582107f200540fd0f1442d114a2656bb3b7887e3c89a0052d5ff08c06db21507f75030702e70353359bc9527738eef9592809521928ecece204d50391d7605c0041709cda6872a4b2232afe6e011f2de791c6df722e4034574ed8b376ec3e35c59e754b0ffd631c960400ab019f7d8276be97f8bc1c295ac3f790266bc8ed0e352d6b662dd947b61e0bb9e1066334378307f8677490ef47c31edc3c46c78715fc131930e7563660a13216e4c586c0930d78b16c51e99e62bfd87df838a6a000f8fec6cfbf729d4f693b04c99df1e24668c6f369cac3b13b53e9c8725379da185e823f41a425f0f255957e8a1afe9afbc9c0c4a0564b6f9aa98c2a9df55d5a1236b64b9e8ef27fac988e3a0e96c878ba9afd58d8ff0813152826d2515218d91ab8e8cffc4394f6489429c5269e952f2282fb98c2964ae60b7ef9f8437e2f36c1f377521cffe4c5b4bf504bf93e827d34e3353e30c608ecd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/refresh-token",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiYTk0NDIyNTcyMTAzMjNkYjIzNmMzNmE0NWNmZGMwOGI4MWU2NDA1NDI2YTRiMjA4NzU4NjM4MDNlN2M3NmMxYmY4YzhlZTMzMjg2MzhlOTUiLCJpYXQiOjE3MTk3OTgyNzguMjU5OTgzLCJuYmYiOjE3MTk3OTgyNzguMjU5OTkyLCJleHAiOjE3MjEwOTQyNzguMjQ2MDU0LCJzdWIiOiIzNSIsInNjb3BlcyI6W119.Qe7mle4w6kBNTiVXX76x8xnwEiqyF-M9e6aCkar0FzcKZ5GBLCQktaWynKK1LfnwQhSvRg4P_K6gLXYEy3MWXETh4PKHhvc8z_-BLFYo-XdyL_GMJ279Y9tngaiAMa3_6swQcIVoLMLIu-oII34_noicwbwP25yNz_RRtRozDFbf9Xi1zcdcEA7di4yp0iWKTGmQxLb97-h3BaMw40nDrg68RPB9ckMH87oJgOeyhABoRaa9kFSkTBC952sEfupp3FBgJVodLn_aJc8usaQ5362gWPKKkmCBBgbm4CaGrqYP1HKn19yDRnb75_h_ypCM0ulbCDU31nffmzsy9y-XWcgrgojOCA_F84sWVeeZz7pan3toGKvUwp6oiXH7F3lhrsut33pIZ1ANAsmZueZ32bPDikz2rmhhCsZqkIRHJCgJwWIHNDIKENh398MkTSqbshF1Hujl4jwlqOXPiFsgod0ddQSFrJFkdHFVh9lOkgOk_oogHecydqUPgf9x0Mj64hPcIiJZG_45Lq_ghnsNcwEcM_PoatmwP7RBPkjZM5QASYNehgj5VQ68IV5zcvwmvgDhzxrWUhU5tCHoSrU4AfA8DGEodsGA1IDLU0hkGGhNuoQ_0w1ebJOuF_PwIJfGnXhCYIn_kShNp6jOFD3Po9unnbcBfa_phPWAPvlPR-g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ForgotPassword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"admin9@localhost.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/forgot-password",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ResetPassword",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Verify",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
