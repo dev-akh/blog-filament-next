@@ -46,14 +46,14 @@ RUN mkdir -p /home/devuser/.composer && \
 COPY . /var/www/html/weone_blog
 
 RUN composer clear-cache
-RUN composer install
+# RUN composer install
 
 RUN chmod -R 777 storage && \
     chmod -R 777 bootstrap
 
-RUN php artisan key:generate && \
-    php artisan storage:link && \
-    php artisan optimize
+# RUN php artisan key:generate && \
+#     php artisan storage:link && \
+#     php artisan optimize
 
 CMD ["apache2-foreground"]
 

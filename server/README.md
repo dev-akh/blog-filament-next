@@ -25,6 +25,10 @@ Add the generated `id` and `secret` keys in .env file
 PASSPORT_PERSONAL_ACCESS_CLIENT_ID=
 PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=
 ```
+After adding client credentials to .env file
+```
+php artisan config:cache
+```
 ## Sending Notification Email 
 - Add email server credentials in .env file 
 - Ref: https://mailtrap.io for mail server (dev mode)
