@@ -13,8 +13,8 @@ services:
     environment:
       - APACHE_RUN_USER=devuser
       - APACHE_RUN_GROUP=www-data
-    # volumes:
-    #   - ./server:/var/www/html/weone_blog:delegated
+    volumes:
+      - ./server:/var/www/html/weone_blog:delegated
     ports:
       - "8080:80"
     links:

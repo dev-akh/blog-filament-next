@@ -125,4 +125,4 @@ NEXT_PUBLIC_SOCKET_URL  = "http://localhost:3001"
 ## Access the front side 
 - Negavite to `http://localhost:3000` for frontend
 
-If you have any questions, don't be hesitate to contact to [dev.aungkyawhtwe@gmail.com](dev.aungkyawhtwe@gmail.com).
+If you have any questions, don't be hesitate to contact [dev.aungkyawhtwe@gmail.com](dev.aungkyawhtwe@gmail.com).
